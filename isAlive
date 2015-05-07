@@ -5,9 +5,11 @@
 
 # Variables
 # Hostname must be qualified
-
-ip=10.10.10.102
-hostname=united-028.ui.local1
+toAddresses=####
+password=####
+username=####
+ip=####
+hostname=####
 preFile="./preFile"
 preArray=()
 
@@ -61,7 +63,7 @@ fi
 #Test xfreerdp --authonly
 #Pass is 0, fail is not 0
 
-xfreerdp -u uird -p <REDACTED> #rI --ignore-certificate --authonly ${hostname}
+xfreerdp -u ${username} -p ${password}  --ignore-certificate --authonly ${hostname}
 rdpRet=$?
 echo "RDP returned: ${rdpRet}"
 
@@ -81,11 +83,11 @@ else # current RDP OK
 fi
 
 if [[ ${rdpMail} == "RdpFailed" ]]; then
-    echo 'RDP FAILED ' | mail -s "RDP to ${hostname} failed" rdunn@unitedimaging.com;
+    echo 'RDP FAILED ' | mail -s "RDP to ${hostname} failed" ${toAddresses};
 fi
 
 if [[ ${rdpMail} == "RdpRecovered" ]]; then
-    echo 'RDP OK ' | mail -s "RDP to ${hostname} has recovered" rdunn@unitedimaging.com;
+    echo 'RDP OK ' | mail -s "RDP to ${hostname} has recovered" ${toAddresses};
 fi
 echo 'New ping and rdp results to write:'
 echo "Ping: ${pingPre}"
