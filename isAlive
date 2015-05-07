@@ -5,12 +5,13 @@
 
 # Variables
 # Hostname must be qualified
-toAddresses=####
-password=####
-username=####
-ip=####
-hostname=####
+toAddresses=
+password=
+username=
+ip=
+hostname=
 preFile="./preFile"
+logFile="./logFile"
 preArray=()
 
 if [[ ! -r ${preFile} ]]; then
@@ -79,16 +80,25 @@ else # current RDP OK
         echo "rdpPre shows failed"
         rdpMail="RdpRecovered";
         rdpPre=0;
+    else
+        rdpMail="RDP Successful";
     fi;
 fi
 
 if [[ ${rdpMail} == "RdpFailed" ]]; then
     echo 'RDP FAILED ' | mail -s "RDP to ${hostname} failed" ${toAddresses};
+    echo "$(date) RDP to ${hostname} failed ${pingMail}" >> ${logFile};
 fi
 
 if [[ ${rdpMail} == "RdpRecovered" ]]; then
     echo 'RDP OK ' | mail -s "RDP to ${hostname} has recovered" ${toAddresses};
+    echo "$(date) RDP to ${hostname} recovered ${pingMail}" >> ${logFile};
 fi
+
+if [[ ${rdpMail} == "RDP Successful" ]]; then
+    echo "$(date) RDP to ${hostname} successful ${pingMail}" >> ${logFile};
+fi
+
 echo 'New ping and rdp results to write:'
 echo "Ping: ${pingPre}"
 echo "RDP: ${rdpPre}"
